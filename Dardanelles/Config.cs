@@ -26,7 +26,14 @@ namespace Dardanelles
             if (!Directory.Exists(ConfFile.DirectoryName))
                 Directory.CreateDirectory(ConfFile.DirectoryName);
             if (!File.Exists(ConfFile.FullName))
-                File.Create(ConfFile.FullName);
+                File.Create(ConfFile.FullName).Close();
+        }
+
+        public void Delete(string key)
+        {
+            List<string> data = FileContents;
+            data.RemoveAll((string s) => s.Split(SEPARATOR)[0] == key);
+            FileContents = data;
         }
 
         public object this[string key]
