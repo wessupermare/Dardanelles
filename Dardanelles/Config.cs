@@ -36,6 +36,11 @@ namespace Dardanelles
             FileContents = data;
         }
 
+        public void DeleteAll()
+        {
+            File.Delete(ConfFile.FullName);
+        }
+
         public object this[string key]
         {
             get

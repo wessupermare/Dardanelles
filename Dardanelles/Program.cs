@@ -9,6 +9,7 @@ namespace Dardanelles
         private readonly Config Config;
         public Program()
         {
+            Config = new Config("data.json");
         }
     }
 }
