@@ -41,6 +41,12 @@ namespace Dardanelles
             File.Delete(ConfFile.FullName);
         }
 
+        public bool ContainsKey(string key)
+        {
+            List<string> data = FileContents;
+            return data.Count((string s) => s.Split(SEPARATOR)[0] == key) > 0;
+        }
+
         public object this[string key]
         {
             get
