@@ -10,6 +10,9 @@ namespace Dardanelles
         public abstract bool AutoGrade { get; }
         public abstract string Prompt { get; protected set; }
         public abstract string Answer { get; protected set; }
+
+        // ID format: type(one digit) difficulty(three digit)
+        public uint ID { get; set; }
     }
 
     internal struct ProblemParameters

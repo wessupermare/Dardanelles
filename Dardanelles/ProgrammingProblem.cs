@@ -17,10 +17,7 @@ namespace Dardanelles
 
         public ProgrammingProblem(ProblemParameters Params)
         {
-            pparams = new ProblemParameters
-            {
-                AllowedLanguages = Params.AllowedLanguages.Substring(r.Next(Params.AllowedLanguages.Length / 2) * 2, 2)
-            };
+            pparams = Params;
 
             string pr = string.Empty, ans = string.Empty;
             retry:
@@ -71,6 +68,7 @@ namespace Dardanelles
             Prompt = pr;
             pparams.AutoGrade = string.IsNullOrWhiteSpace(ans);
             Answer = ans;
+            ID = uint.Parse($"{(int)ProblemType.Programming + 1}{(pparams.AllowedLanguages == "VB" ? 1 : (pparams.AllowedLanguages == "C#" ? 2 : 3))}{((int)(pparams.Difficulty * 10)).ToString().PadLeft(3, '0')}");
         }
 
         private string P0(ProblemParameters Params)             // Confirmation tasks, instructional, forced non-autograded.
@@ -215,13 +213,7 @@ namespace Dardanelles
 
         private string PP(ProblemParameters Params)             // Practical tasks of all sorts.
         {
-            double diffSet = Math.Min(10, Math.Max(9, r.NextDouble() * (double)Params.Difficulty));
-            pparams.Difficulty = (decimal)diffSet;
-
-            if (diffSet < 6)
-                return $"";
-            else
-                return $"";
+            return $"Ask your teacher for a practical system to build in {pparams.AllowedLanguages}. It could be a shopping system, a useful tool, or something a little more relevant to you.";
         }
     }
 }

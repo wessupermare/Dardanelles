@@ -15,7 +15,7 @@ namespace Dardanelles
 
         private List<string> FileContents
         {
-            get { return File.ReadAllLines(ConfFile.FullName, Encoding.UTF8).ToList(); }
+            get { return File.ReadAllLines(ConfFile.FullName, Encoding.UTF8).ToList().ConvertAll((s) => s.Replace("\\r\\n", Environment.NewLine)); }
 
             set { File.WriteAllLines(ConfFile.FullName, value, Encoding.UTF8); }
         }
@@ -55,7 +55,12 @@ namespace Dardanelles
                 {
                     string[] data = item.Split(SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
                     if (data[0] == key)
-                        return JsonConvert.DeserializeObject(data[1]);
+                    {
+                        object retval = JsonConvert.DeserializeObject(data[1]);
+                        if (retval is Newtonsoft.Json.Linq.JArray)
+                            return ((Newtonsoft.Json.Linq.JArray)retval).ToList();
+                        return retval;
+                    }
                 }
                 throw new KeyNotFoundException($"Key {key} not found in config file.");
             }
@@ -63,7 +68,7 @@ namespace Dardanelles
             set
             {
                 List<string> data = FileContents;
-                string item = key + SEPARATOR + JsonConvert.SerializeObject(value, Formatting.Indented);
+                string item = (key + SEPARATOR + JsonConvert.SerializeObject(value, Formatting.Indented)).Replace(Environment.NewLine, "\\r\\n");
                 int datIndex = data.FindIndex((string s) => s.Split(SEPARATOR)[0] == key);
                 if (datIndex >= 0)
                     data[datIndex] = item;
